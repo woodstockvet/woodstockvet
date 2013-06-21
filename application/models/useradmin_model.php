@@ -12,8 +12,9 @@ class Useradmin_model extends CI_Model {
      */
     
     function addUserToDB($form_data1,$form_data2){
-        $this->load->database('woodstoc_vetgroup1');
-        
+       // $this->load->database('woodstoc_vetgroup1');  
+	   //databse is in the auto loader, this line not needed
+	           
         $this->db->trans_start();
         $this->db->insert('User_T',$form_data1);
        
