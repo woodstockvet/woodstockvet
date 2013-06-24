@@ -51,7 +51,10 @@ $this->session->set_userdata($customer_info);
 
 $this->account();
 } else {
-echo "You got knocked the !#@ out.";
+
+    redirect(base_url()."staticPages/destination/loginErrPage");
+
+
 }
 }
 }
