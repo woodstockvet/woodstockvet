@@ -1,4 +1,4 @@
-  <div class="content">
+   <div class="content">
       
       
     <h1>&nbsp;</h1>
@@ -10,7 +10,7 @@
     <p>Password <input type="password" name="password"> </p>
     <input type="submit">
     </form>
-   [ Register  |   Forgotten Password?]
+   [<a href="./register"> Register </a>  |   Forgotten Password?]
     <p></p>
     <p>&nbsp;</p>
     <p>&nbsp;</p>

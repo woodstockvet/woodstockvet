@@ -9,18 +9,94 @@ class Appointment extends CI_Controller {
         	$this->load->helper(array('form', 'url'));
 		$this->load->library('form_validation');
                
-                $this->load->model('Useradmin_model');
+                $this->load->model('Appointment_model');
                 
                	$this->load->view('defaultPageHeader');
                 $this->load->view('defaultPageSidebar');
+               
                 
-                $prefs = array (
+                
+                  $regexTime="";
+                 if ($this->uri->segment(5))
+                 
+                 {  $daysInMonth = cal_days_in_month(CAL_GREGORIAN, $this->uri->segment(5),$this->uri->segment(4));
+                        
+                       $selectedDate= $this->uri->segment(4).'-'.$this->uri->segment(5).'-'.$this->uri->segment(6);
+                       $apptTimes = $this->Appointment_model->getAppointmentsByDate($selectedDate,'Apt_Time');
+                      
+                       $regexTime ="";
+                       foreach ($apptTimes as $eachTime)
+                       {
+                           $regexTime = $regexTime.$eachTime["Apt_Time"]."|";}
+                                             
+
+                           $regexTime = trim($regexTime,"-");
+                    
+                              for ($day=1;$day<=$daysInMonth;$day++){ 
+              $data[$day] = base_url()."index.php/front_end/appointment/schedule/".$this->uri->segment(4)."/".$this->uri->segment(5)."/".$day;
+                 }
+             
+                 }
+                  else
+                  {   $today = getdate();
+                      $month = $today['mon'];
+                      $year = $today['year'];
+                      $daysInMonth = cal_days_in_month(CAL_GREGORIAN,$month,$year);    
+                      for ($day=1;$day<=$daysInMonth;$day++){ 
+                  
+              $data[$day] = base_url()."index.php/front_end/appointment/schedule/".$year."/".$month."/".$day;
+                 }}
+                
+                 $next_prev_url = base_url()."index.php/front_end/appointment/schedule";
+               
+                 
+                
+                 
+          
+                 
+                          $prefs = array (
                'show_next_prev'  => TRUE,
-              'next_prev_url'   => 'http://woodstock/index.php/front_end/appointment/schedule'
+              'next_prev_url'   => $next_prev_url
              );
+                          
+                          
+                $prefs['template'] = '
+
+   {table_open}<table border="1" cellpadding="0" cellspacing="5">{/table_open}
+
+   {heading_row_start}<tr>{/heading_row_start}
+
+   {heading_previous_cell}<th><a href="{previous_url}">&lt;&lt;</a></th>{/heading_previous_cell}
+   {heading_title_cell}<th colspan="{colspan}">{heading}</th>{/heading_title_cell}
+   {heading_next_cell}<th><a href="{next_url}">&gt;&gt;</a></th>{/heading_next_cell}
+
+   {heading_row_end}</tr>{/heading_row_end}
+
+   {week_row_start}<tr>{/week_row_start}
+   {week_day_cell}<td>{week_day}</td>{/week_day_cell}
+   {week_row_end}</tr>{/week_row_end}
+
+   {cal_row_start}<tr>{/cal_row_start}
+   {cal_cell_start}<td>{/cal_cell_start}
+
+   {cal_cell_content}<a href="{content}">{day}</a>{/cal_cell_content}
+   {cal_cell_content_today}<div class="highlight"><a href="{content}">{day}</a></div>{/cal_cell_content_today}
+
+   {cal_cell_no_content}{day}{/cal_cell_no_content}
+   {cal_cell_no_content_today}<div class="highlight">{day}</div>{/cal_cell_no_content_today}
+
+   {cal_cell_blank}&nbsp;{/cal_cell_blank}
+
+   {cal_cell_end}</td>{/cal_cell_end}
+   {cal_row_end}</tr>{/cal_row_end}
+
+   {table_close}</table>{/table_close}
+';
+                 
+                 $data['regex']=$regexTime;
                 
                  $this->load->library('calendar',$prefs);
-                $this->load->view('appointmentForm');
+                $this->load->view('appointmentForm',array('data' => $data));
             
                 $this->load->view('defaultPageFooter');
                 

@@ -2,7 +2,7 @@
     <ul class="nav">
         
       
-      <li><a href="<?php base_url();?>">Home</a></li>
+      <li><a href="<?php base_url();?>/">Home</a></li>
       <li><a href="<?php base_url();?>/staticPages/destination/aboutUsPage">About Us</a></li>
       <li><a href="<?php base_url();?>/staticPages/destination/servicesPage">Services</a></li>
       <li><a href="<?php base_url();?>/staticPages/destination/staffPage">Meet the Staff</a></li>
